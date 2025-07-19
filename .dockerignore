@@ -49,7 +49,6 @@ CODEOWNERS
 .yarnrc
 package-lock.json
 yarn.lock
-pnpm-lock.yaml
 
 # Coolify specific
 .coolify
