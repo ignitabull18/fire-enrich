@@ -56,16 +56,3 @@ coolify.yml
 /build/
 !/build/package.json
 !/build/pnpm-lock.yaml
-
-# Exclude source code if not needed in the final image
-app/
-components/
-hooks/
-lib/
-public/
-scripts/
-styles/
-types/
-
-# Keep necessary build artifacts if any
-!build/ 
