@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import { z } from 'zod';
 import { zodResponseFormat } from 'openai/helpers/zod';
-import type { EnrichmentField, EnrichmentResult } from '../types';
+import type { EnrichmentField, EnrichmentResult, SourceContext } from '../types';
 
 export class OpenAIService {
   private client: OpenAI;
@@ -646,13 +646,13 @@ REMEMBER: Extract exact_text from the "=== ACTUAL CONTENT BELOW ===" section, NO
             
             // Debug log what we're keeping
             if (validSourceContext.length > 0) {
-              console.log(`[SOURCE-CONTEXT] For ${field.name}, keeping ${validSourceContext.length} sources:`, 
-                validSourceContext.map(sc => ({ url: sc.url, snippet: sc.snippet.substring(0, 50) + '...' }))
+              console.log(`[SOURCE-CONTEXT] For ${field.name}, keeping ${validSourceContext.length} sources:`,
+                validSourceContext.map((sc: SourceContext) => ({ url: sc.url, snippet: sc.snippet.substring(0, 50) + '...' }))
               );
             }
             
             // Final validation - if all snippets look like titles, clear them
-            const allSnippetsAreTitles = validSourceContext.every(sc => {
+            const allSnippetsAreTitles = validSourceContext.every((sc: SourceContext) => {
               const text = sc.snippet;
               const hasSentenceEnding = /[.!?]/.test(text);
               const hasTitle = text.includes(' | ') || (text.includes(' - ') && !hasSentenceEnding);

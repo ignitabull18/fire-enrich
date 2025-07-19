@@ -41,7 +41,7 @@ export interface SearchResult {
 
 export interface EnrichmentResult {
   field: string;
-  value: string | number | boolean | string[];
+  value: string | number | boolean | string[] | null;
   confidence: number;
   source?: string;
   sourceContext?: {
@@ -58,6 +58,13 @@ export interface EnrichmentResult {
     }>;
     sources_agree: boolean;
   };
+  sources?: SourceContext[];
+}
+
+export interface SourceContext {
+  url: string;
+  snippet: string;
+  confidence: number;
 }
 
 export interface RowEnrichmentResult {

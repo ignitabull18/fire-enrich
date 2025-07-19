@@ -734,11 +734,11 @@ export class AgentOrchestrator {
           console.log(`[SOURCE-CONTEXT] Using fallback snippet extraction for ${fieldName}`);
           
           enrichment.sourceContext = filteredResults.map(r => {
-            const snippet = findRelevantSnippet(
+            const snippet = enrichment.value ? findRelevantSnippet(
               r.markdown || '',
               enrichment.value,
               fieldName
-            );
+            ) : null;
             
             if (!snippet) {
               console.log(`[SOURCE-CONTEXT] No snippet found for ${fieldName} value "${enrichment.value}" in ${r.url}`);
@@ -746,7 +746,7 @@ export class AgentOrchestrator {
             
             return {
               url: r.url,
-              snippet
+              snippet: snippet || `Content from ${r.title || 'source'}`
             };
           }).filter(ctx => {
             const hasSnippet = ctx.snippet && ctx.snippet.length > 0;

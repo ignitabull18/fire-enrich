@@ -723,12 +723,15 @@ export function EnrichmentTable({ rows, fields, emailColumn }: EnrichmentTablePr
                           ) : !enrichment || enrichment.value === null || enrichment.value === undefined || enrichment.value === '' ? (
                           <div 
                             className={shouldAnimate && !isCellShown ? "animate-in fade-in slide-in-from-bottom-2" : ""}
-                            style={shouldAnimate && !isCellShown ? {
-                              animationDuration: '500ms',
-                              animationDelay: `${cellDelay}ms`,
-                              animationFillMode: 'both',
-                              animationTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
-                            } : {}}
+                            {...(shouldAnimate && !isCellShown ? {
+                              style: {
+                                '--animation-delay': `${cellDelay}ms`,
+                                animationDuration: '500ms',
+                                animationDelay: `var(--animation-delay)`,
+                                animationFillMode: 'both',
+                                animationTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                              } as React.CSSProperties
+                            } : {})}
                           >
                             <span className="flex items-center gap-1 text-gray-400">
                               <X size={16} />
@@ -738,12 +741,15 @@ export function EnrichmentTable({ rows, fields, emailColumn }: EnrichmentTablePr
                         ) : (
                           <div 
                             className={shouldAnimate && !isCellShown ? "animate-in fade-in slide-in-from-bottom-2" : ""}
-                            style={shouldAnimate && !isCellShown ? {
-                              animationDuration: '500ms',
-                              animationDelay: `${cellDelay}ms`,
-                              animationFillMode: 'both',
-                              animationTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
-                            } : {}}
+                            {...(shouldAnimate && !isCellShown ? {
+                              style: {
+                                '--animation-delay': `${cellDelay}ms`,
+                                animationDuration: '500ms',
+                                animationDelay: `var(--animation-delay)`,
+                                animationFillMode: 'both',
+                                animationTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                              } as React.CSSProperties
+                            } : {})}
                           >
                             <div className="flex flex-col gap-1">
                               <div className="font-medium text-gray-800">

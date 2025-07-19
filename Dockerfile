@@ -1,6 +1,11 @@
 # Invalidate cache
 FROM node:18-alpine AS base
 
+# Add labels for better image metadata
+LABEL maintainer="Fire Enrich Team"
+LABEL description="Fire Enrich - AI-Powered Data Enrichment Tool"
+LABEL version="1.0"
+
 # 1. Install dependencies only when needed
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
@@ -27,23 +32,29 @@ FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+# Disable Next.js telemetry for production
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
 # Update ownership of the .next directory
-RUN mkdir -p .next && chown -R node:node .next
+RUN mkdir -p .next && chown -R nextjs:nodejs .next
 
 # Copy the standalone Next.js server output
-COPY --from=builder --chown=node:node /app/.next/standalone ./
-COPY --from=builder --chown=node:node /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Set the user to "node"
-USER node
+# Set the user to the non-root user
+USER nextjs
 
 EXPOSE 3000
+ENV PORT=3000
 
-ENV PORT 3000
+# Add health check for Coolify monitoring
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/api/check-env', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"
 
 # Server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
