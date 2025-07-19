@@ -31,6 +31,9 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 
+# Install curl for healthcheck in the runtime container
+RUN apk add --no-cache curl
+
 ENV NODE_ENV=production
 # Disable Next.js telemetry for production
 ENV NEXT_TELEMETRY_DISABLED=1
