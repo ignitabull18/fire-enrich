@@ -1,3 +1,4 @@
+# Invalidate cache
 FROM node:18-alpine AS base
 
 # 1. Install dependencies only when needed
